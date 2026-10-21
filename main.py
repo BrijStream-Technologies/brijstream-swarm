@@ -40,8 +40,10 @@ class StartRequest(BaseModel):
     hours: Optional[float] = 24.0
 
 
-def verify_api_key(authorization: Optional[str] = Header(None)):
+def verify_api_key(authorization: Optional[str] = Header(None), key: Optional[str] = Query(None)):
     if not SWARM_API_KEY:
+        return True
+    if key and key == SWARM_API_KEY:
         return True
     if not authorization:
         raise HTTPException(
@@ -71,6 +73,12 @@ def serve_dashboard():
     if STATIC_INDEX.exists():
         with open(STATIC_INDEX, "r", encoding="utf-8") as f:
             content = f.read()
+        try:
+            stats = swarm.get_stats()
+            total_fmt = f"{stats['total_entities']:,}"
+            content = content.replace("1,528,740", total_fmt)
+        except Exception:
+            pass
         return HTMLResponse(content=content)
     return HTMLResponse("<h1>BrijStream Swarm OS Active</h1><p>Dashboard file initializing...</p>")
 
@@ -85,15 +93,15 @@ def get_swarm_status():
 
 
 @app.post("/api/swarm/start")
-def start_swarm(payload: StartRequest = StartRequest(), authorization: Optional[str] = Header(None)):
-    verify_api_key(authorization)
+def start_swarm(payload: StartRequest = StartRequest(), authorization: Optional[str] = Header(None), key: Optional[str] = Query(None)):
+    verify_api_key(authorization, key)
     result = swarm.start(hours=payload.hours)
     return result
 
 
 @app.post("/api/swarm/pause")
-def pause_swarm(authorization: Optional[str] = Header(None)):
-    verify_api_key(authorization)
+def pause_swarm(authorization: Optional[str] = Header(None), key: Optional[str] = Query(None)):
+    verify_api_key(authorization, key)
     result = swarm.pause()
     return result
 

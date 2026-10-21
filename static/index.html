@@ -44,11 +44,11 @@
         <div class="flex items-center gap-2">
           <h1 class="text-sm font-bold tracking-tight text-white">BrijStream Swarm OS</h1>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-800/80">Stage 2: Pan-African Hub</span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-800/80 flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-live"></span> Swarm Harvester Session Complete (6:00 AM)
+          <span id="telemetry-status-pill" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-800/80 flex items-center gap-1 cursor-pointer" onclick="toggleSwarmFromDashboard()">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Cloud Swarm Paused (Target Reached) • Click to Resume
           </span>
         </div>
-        <p class="text-[11px] text-slate-400">120 Posts • 30 Days • <span class="text-cyan-300 font-semibold font-mono">753,052 Entities Harvested</span> (500 Priority Staged)</p>
+        <p class="text-[11px] text-slate-400">120 Posts • 30 Days • <span id="telemetry-header-count" class="text-cyan-300 font-semibold font-mono">1,528,740 Entities Harvested</span> (500 Priority Staged)</p>
       </div>
     </div>
 
@@ -73,7 +73,7 @@
     <!-- Global Counters -->
     <div class="flex items-center gap-3 text-xs font-mono">
       <div class="px-3 py-1 rounded-lg bg-purple-950/50 border border-purple-800/60 text-purple-300">
-        Total Harvested: <span class="font-bold text-white">753,052</span>
+        Total Harvested: <span id="telemetry-total-harvested" class="font-bold text-white">1,528,740</span>
       </div>
       <button onclick="exportDMsManifest()" class="px-3 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-600 text-white text-xs font-medium transition flex items-center gap-1.5 shadow-md shadow-purple-900/30">
         📥 Export Staged JSON
@@ -228,7 +228,7 @@
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-xl">🌍</span>
             <h2 class="text-lg font-bold text-white">Pan-African Creative Directory & Direct Outreach Hub</h2>
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-purple-950 text-purple-300 border border-purple-800 font-bold">753,052 Harvested Database</span>
+            <span id="telemetry-database-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-purple-950 text-purple-300 border border-purple-800 font-bold">1,528,740 Harvested Database</span>
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">500 Priority Staged</span>
           </div>
           <p class="text-xs text-slate-400 mt-1">
@@ -237,6 +237,9 @@
         </div>
 
         <div class="flex items-center gap-2">
+          <button onclick="toggleSwarmFromDashboard()" id="btn-cloud-toggle" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1.5 shadow-md shadow-emerald-900/40">
+            ▶️ Resume Cloud Swarm
+          </button>
           <button onclick="exportDMsManifest()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-500 text-white transition flex items-center gap-1.5 shadow-md shadow-purple-900/40">
             Export Staged 500 JSON
           </button>
@@ -247,27 +250,27 @@
       <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
         <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 text-center">
           <div class="text-xs text-slate-400">🇿🇦 Southern Africa</div>
-          <div class="text-lg font-bold text-white mt-0.5 font-mono">239,535</div>
+          <div id="telemetry-reg-southern" class="text-lg font-bold text-white mt-0.5 font-mono">428,237</div>
           <div class="text-[10px] text-purple-400">SA, ZW, ZM</div>
         </div>
         <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 text-center">
           <div class="text-xs text-slate-400">🇳🇬/🇬🇭 Western Africa</div>
-          <div class="text-lg font-bold text-white mt-0.5 font-mono">202,865</div>
+          <div id="telemetry-reg-western" class="text-lg font-bold text-white mt-0.5 font-mono">416,885</div>
           <div class="text-[10px] text-blue-400">NG, GH, CI, SN</div>
         </div>
         <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 text-center">
           <div class="text-xs text-slate-400">🇰🇪/🇹🇿 Eastern Africa</div>
-          <div class="text-lg font-bold text-white mt-0.5 font-mono">135,973</div>
+          <div id="telemetry-reg-eastern" class="text-lg font-bold text-white mt-0.5 font-mono">297,347</div>
           <div class="text-[10px] text-cyan-400">KE, TZ, UG, RW</div>
         </div>
         <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 text-center">
           <div class="text-xs text-slate-400">🇪🇬/🇲🇦 North Africa</div>
-          <div class="text-lg font-bold text-white mt-0.5 font-mono">100,786</div>
+          <div id="telemetry-reg-north" class="text-lg font-bold text-white mt-0.5 font-mono">217,073</div>
           <div class="text-[10px] text-amber-400">EG, MA</div>
         </div>
         <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 text-center">
           <div class="text-xs text-slate-400">🇨🇩/🇨🇲 Central Africa</div>
-          <div class="text-lg font-bold text-white mt-0.5 font-mono">73,893</div>
+          <div id="telemetry-reg-central" class="text-lg font-bold text-white mt-0.5 font-mono">169,198</div>
           <div class="text-[10px] text-emerald-400">CD, CM</div>
         </div>
       </div>
@@ -1042,6 +1045,79 @@
       }, 3500);
     }
 
+    async function syncLiveCloudTelemetry() {
+      try {
+        const res = await fetch('/api/swarm/status');
+        const json = await res.json();
+        if (json.status === 'success' && json.data) {
+          const d = json.data;
+          const totalFormatted = (d.total_entities || 0).toLocaleString();
+          const elTotal = document.getElementById('telemetry-total-harvested');
+          if (elTotal) elTotal.innerText = totalFormatted;
+          const elHeader = document.getElementById('telemetry-header-count');
+          if (elHeader) elHeader.innerText = totalFormatted + ' Entities Harvested';
+          const elBadge = document.getElementById('telemetry-database-badge');
+          if (elBadge) elBadge.innerText = totalFormatted + ' Harvested Database';
+
+          if (d.regions) {
+            if (d.regions['Southern Africa'] && document.getElementById('telemetry-reg-southern'))
+              document.getElementById('telemetry-reg-southern').innerText = d.regions['Southern Africa'].toLocaleString();
+            if (d.regions['Western Africa'] && document.getElementById('telemetry-reg-western'))
+              document.getElementById('telemetry-reg-western').innerText = d.regions['Western Africa'].toLocaleString();
+            if (d.regions['Eastern Africa'] && document.getElementById('telemetry-reg-eastern'))
+              document.getElementById('telemetry-reg-eastern').innerText = d.regions['Eastern Africa'].toLocaleString();
+            if (d.regions['North Africa'] && document.getElementById('telemetry-reg-north'))
+              document.getElementById('telemetry-reg-north').innerText = d.regions['North Africa'].toLocaleString();
+            if (d.regions['Central & Pan-African'] && document.getElementById('telemetry-reg-central'))
+              document.getElementById('telemetry-reg-central').innerText = d.regions['Central & Pan-African'].toLocaleString();
+          }
+
+          const elStatusPill = document.getElementById('telemetry-status-pill');
+          const elBtn = document.getElementById('btn-cloud-toggle');
+          if (d.is_running) {
+            if (elStatusPill) {
+              elStatusPill.className = "px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800/80 flex items-center gap-1 cursor-pointer";
+              elStatusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Cloud Swarm Active • ' + (d.current_country || 'Scouting');
+            }
+            if (elBtn) {
+              elBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white transition flex items-center gap-1.5 shadow-md shadow-amber-900/40";
+              elBtn.innerHTML = '⏸️ Pause Swarm';
+            }
+          } else {
+            if (elStatusPill) {
+              elStatusPill.className = "px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-800/80 flex items-center gap-1 cursor-pointer";
+              elStatusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Swarm Paused (Target Reached) • Click to Resume';
+            }
+            if (elBtn) {
+              elBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1.5 shadow-md shadow-emerald-900/40";
+              elBtn.innerHTML = '▶️ Resume Cloud Swarm';
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Live telemetry sync:', err);
+      }
+    }
+
+    async function toggleSwarmFromDashboard() {
+      try {
+        const check = await fetch('/api/swarm/status');
+        const json = await check.json();
+        const isRunning = json.data && json.data.is_running;
+        const targetUrl = isRunning ? '/api/swarm/pause?key=brijstream_swarm_secret_key_2026' : '/api/swarm/start?key=brijstream_swarm_secret_key_2026';
+        const res = await fetch(targetUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hours: 24.0 })
+        });
+        const out = await res.json();
+        showToast(out.message || 'Swarm state updated');
+        setTimeout(syncLiveCloudTelemetry, 1000);
+      } catch (e) {
+        showToast('Error toggling swarm: ' + e);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       hydrateLocalApprovals();
       renderMatrixGrid();
@@ -1049,6 +1125,8 @@
       renderCreativesList();
       inspectPost(selectedPostId);
       inspectCreative(selectedCreativeId);
+      syncLiveCloudTelemetry();
+      setInterval(syncLiveCloudTelemetry, 5000);
     });
   </script>
 </body>
